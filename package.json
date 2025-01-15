@@ -11,6 +11,7 @@
   "author": "Ummy Habiba",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
     "express-handlebars": "^8.0.1",

@@ -3,8 +3,8 @@ const Sequelize = require('sequelize');
 const db = {
     host: 'localhost',
     user: 'root',
-    database: 'shop-sequel',
-    password: 'mypass',
+    database: 'shopsequel',
+    password: '123456789',
     dialect: 'mysql'
 };
 

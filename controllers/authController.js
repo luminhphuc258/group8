@@ -1,3 +1,8 @@
+// ADD NEW LIBRARY
+const User = require('../models/user')
+const Bcrypt = require('bcrypt');
+//=============================
+
 exports.getIndex = (req, res, next) => {
   res.render('index', {
     path: '/index',
@@ -28,14 +33,18 @@ exports.postLogin = (req, res, next) => {
   res.redirect('/products');
 };
 
-/*
+
+//============== UPDATE OUR GROUP CODE 
 
 // signup
 exports.postSignup = (req, res, next) => {
 
+
+
+
 };
 
 exports.postLogout = (req, res, next) => {
-  
+
 };
-*/
+

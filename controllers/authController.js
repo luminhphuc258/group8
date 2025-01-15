@@ -1,5 +1,7 @@
+
 // ADD NEW LIBRARY
-const User = require('../models/user')
+const User = require('../models/user');
+const Product = require('../models/products');
 const Bcrypt = require('bcrypt');
 //=============================
 
@@ -31,27 +33,36 @@ exports.getSignup = (req, res, next) => {
 exports.postLogin = async (req, res, next) => {
   // req.isLoggedIn = true;
   // res.redirect('/products');
+
   // ======= UPDATE CODE 
   const useremail = req.body.email;
   const password = req.body.password;
   // do a authentiona for this user
-  const isValid = await User.findOne({ where: { email: useremail.toLowerCase() } });
+  const user = await User.findOne({ where: { email: useremail.toLowerCase() } });
 
-  if (isValid) {
-    console.log("Login successfully!" + useremail);
-    req.session.isLoggedIn = true;
+  if (user) {
+    // Compare provided password with stored hashed password
+    const isValid = await Bcrypt.compare(password, user.password);
+    if (isValid) {
+      // when login successfully
+      console.log("Login successfully!" + useremail);
+      req.session.isLoggedIn = true;
 
-    // let redirt to main page of product 
-    await Product.findAll()
-      .then(products => {
-        res.render('index', {
-          prods: products,
-          pageTitle: 'My Shop',
-          path: '/',
-          isAuthenticated: req.session.isLoggedIn
-        });
-      })
-      .catch(err => console.log(err));
+      // let redirt to main page of product 
+      await Product.findAll()
+        .then(products => {
+          res.render('products', {
+            prods: products,
+            pageTitle: 'Express Shop',
+            path: '/products',
+            isAuthenticated: req.session.isLoggedIn
+          });
+        })
+        .catch(err => console.log(err));
+    } else {
+      // Password does not match
+      res.status(401).send({ message: "Authentication failed. Wrong password." });
+    }
 
   } else {
     // req.session.isLoggedIn = true;
@@ -63,7 +74,6 @@ exports.postLogin = async (req, res, next) => {
 };
 
 //============== UPDATE OUR GROUP CODE 
-
 // signup
 exports.postSignup = (req, res, next) => {
   const fullname = req.body.fullname;

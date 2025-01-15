@@ -1,5 +1,6 @@
 const sequelizedB = require('../utils/database');
 const Sequelize = require('sequelize');
+const { v4: uuidv4 } = require('uuid');
 
 
 // const User = sequelizedB.define('user',

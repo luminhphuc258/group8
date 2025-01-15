@@ -3,6 +3,7 @@ const productsController = require('../controllers/productController');
 
 const router = express.Router();
 
+// router.get('/products', isauth, productsController.getProducts);
 router.get('/products', productsController.getProducts);
 
 // /admin/add-product => GET

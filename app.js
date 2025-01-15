@@ -1,16 +1,39 @@
-const express = require('express'); 
+const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 
 const sequelizedB = require('./utils/database');
 const User = require('./models/user');
 
+//update code , add session 
+const session = require('express-session');
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
+
+
 const server = express();
 server.set('view engine', 'ejs');
 server.set('views', 'views');
 
-server.use(bodyParser.urlencoded({extended: false}));
+server.use(bodyParser.urlencoded({ extended: false }));
 server.use(express.static(path.join(__dirname, 'public')));
+
+// update code, add session 
+// create session store in mysql
+const sessionStore = new SequelizeStore({
+  db: sequelizedB,
+  tableName: 'sessions',
+})
+
+// setup server's session store
+server.use(
+  session({
+    secret: 'my_secret_key',
+    store: sessionStore,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
 
 const adminRoutes = require('./routes/admin');
 const authRoutes = require('./routes/auth');
@@ -25,8 +48,8 @@ sequelizedB
     User.findOne().then(user => {
       if (!user) {
         const user = new User({
-          name: 'Ummy',
-          email: 'u.habiba@uwinnipeg.ca'
+          name: 'group8',
+          email: 'group8@uwinnipeg.ca'
         });
         user.save();
       }
@@ -34,7 +57,8 @@ sequelizedB
     // start the server listening on port 3000
     const port = 3000;
     server.listen(port, () => {
-    console.log(`Server listening on port ${port}`);});
+      console.log(`Server listening on port ${port}`);
+    });
   })
   .catch(err => {
     console.log(err);

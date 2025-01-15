@@ -18,9 +18,11 @@
                     <label for="password">Password</label>
                     <input type="password" name="password" id="password" placeholder="Enter your password">
                 </div>
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <button class="btn" type="submit">Login</button>
             </form>
             <div class="login-message">
+                
                 <p id="login-message">Not registered? <a class="<%= path === '/signup' ? 'active' : '' %>" href="/signup">Signup</a> </p>
             </div>
 

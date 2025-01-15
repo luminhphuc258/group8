@@ -3,10 +3,12 @@
 const User = require('../models/user');
 const Product = require('../models/products');
 const Bcrypt = require('bcrypt');
+const Product = require('../models/products');
 //=============================
 
 exports.getIndex = (req, res, next) => {
   res.render('index', {
+    csrfToken: req.csrfToken(),
     path: '/index',
     pageTitle: 'Login',
     isAuthenticated: req.isLoggedIn
@@ -15,6 +17,7 @@ exports.getIndex = (req, res, next) => {
 
 exports.getLogin = (req, res, next) => {
   res.render('index', {
+    csrfToken: req.csrfToken(),
     path: '/login',
     pageTitle: 'Login',
     isAuthenticated: req.isLoggedIn
@@ -24,6 +27,7 @@ exports.getLogin = (req, res, next) => {
 
 exports.getSignup = (req, res, next) => {
   res.render('signup', {
+    csrfToken: req.csrfToken(),
     path: '/signup',
     pageTitle: 'Signup',
     isAuthenticated: req.isLoggedIn
@@ -37,7 +41,7 @@ exports.postLogin = async (req, res, next) => {
   // ======= UPDATE CODE 
   const useremail = req.body.email;
   const password = req.body.password;
-  // do a authentiona for this user
+ 
   const user = await User.findOne({ where: { email: useremail.toLowerCase() } });
 
   if (user) {
@@ -63,6 +67,7 @@ exports.postLogin = async (req, res, next) => {
       // Password does not match
       res.status(401).send({ message: "Authentication failed. Wrong password." });
     }
+
 
   } else {
     // req.session.isLoggedIn = true;
@@ -112,6 +117,7 @@ exports.postSignup = (req, res, next) => {
 
 exports.postLogout = (req, res, next) => {
   req.session.destroy(err => {
+   
     console.log(err);
     res.redirect('/');
   });

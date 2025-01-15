@@ -56,6 +56,7 @@ sequelizedB
       if (!user) {
         const user = new User({
           name: 'group8',
+          password: '123',
           email: 'group8@uwinnipeg.ca'
         });
         user.save();

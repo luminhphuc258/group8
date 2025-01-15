@@ -22,6 +22,8 @@ server.use(express.static(path.join(__dirname, 'public')));
 const sessionStore = new SequelizeStore({
   db: sequelizedB,
   tableName: 'sessions',
+  checkExpirationInterval: 20 * 1000, // 20 second
+  expiration: 10 * 60 * 1000 // 10 minutes
 })
 
 //object to use for csrf protection
@@ -63,7 +65,7 @@ sequelizedB
       }
     });
     // start the server listening on port 3000
-    const port = 4000;
+    const port = 3000;
     server.listen(port, () => {
       console.log(`Server listening on port ${port}`);
     });
@@ -75,7 +77,7 @@ sequelizedB
 
 // fetch our dummy user to use as Logged in user
 server.use((req, res, next) => {
-  User.findByPk('7897fb93-b895-4da6-aa93-b473e132ec4a')
+  User.findByPk('d6bc8afd-3df1-4f14-bc59-166c3db05461')
     .then(user => {
       req.user = user;
       next();
@@ -84,7 +86,7 @@ server.use((req, res, next) => {
 });
 
 // apply csrf protection for logged in users session
-server.use((req,res, next) => {
+server.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isloggedin;
   res.locals.csrfToken = req.csrfToken();
   next();

@@ -3,7 +3,6 @@
 const User = require('../models/user');
 const Product = require('../models/products');
 const Bcrypt = require('bcrypt');
-const Product = require('../models/products');
 //=============================
 
 exports.getIndex = (req, res, next) => {
@@ -41,7 +40,7 @@ exports.postLogin = async (req, res, next) => {
   // ======= UPDATE CODE 
   const useremail = req.body.email;
   const password = req.body.password;
- 
+
   const user = await User.findOne({ where: { email: useremail.toLowerCase() } });
 
   if (user) {
@@ -56,6 +55,7 @@ exports.postLogin = async (req, res, next) => {
       await Product.findAll()
         .then(products => {
           res.render('products', {
+            csrfToken: req.csrfToken(),
             prods: products,
             pageTitle: 'Express Shop',
             path: '/products',
@@ -117,8 +117,10 @@ exports.postSignup = (req, res, next) => {
 
 exports.postLogout = (req, res, next) => {
   req.session.destroy(err => {
-   
-    console.log(err);
+    if (err) {
+      console.log(err);
+      return next(err);
+    }
     res.redirect('/');
   });
 };

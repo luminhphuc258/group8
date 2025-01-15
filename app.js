@@ -8,7 +8,7 @@ const User = require('./models/user');
 //update code , add session 
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
-
+const csrf = require('csurf');
 
 const server = express();
 server.set('view engine', 'ejs');
@@ -24,6 +24,10 @@ const sessionStore = new SequelizeStore({
   tableName: 'sessions',
 })
 
+//object to use for csrf protection
+const csrfProtection = csrf();
+
+
 // setup server's session store
 server.use(
   session({
@@ -33,6 +37,9 @@ server.use(
     saveUninitialized: false,
   })
 );
+
+
+server.use(csrfProtection);
 
 
 const adminRoutes = require('./routes/admin');
@@ -55,7 +62,7 @@ sequelizedB
       }
     });
     // start the server listening on port 3000
-    const port = 3000;
+    const port = 4000;
     server.listen(port, () => {
       console.log(`Server listening on port ${port}`);
     });
@@ -75,3 +82,10 @@ server.use((req, res, next) => {
     .catch(err => console.log(err));
 });
 
+// apply csrf protection for logged in users session
+server.use((req,res, next) => {
+  res.locals.isAuthenticated = req.session.isloggedin;
+  res.locals.csrfToken = req.csrfToken();
+  next();
+  console.log('csrf token', req.csrfToken());
+});

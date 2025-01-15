@@ -4,6 +4,7 @@ exports.getIndex = (req, res, next) => {
   Product.findAll()
   .then(products => {
     res.render('index', {
+      csrfToken: req.csrfToken(),
       prods: products,
       pageTitle: 'My Shop',
       path: '/',
@@ -18,6 +19,7 @@ exports.getProducts = (req, res, next) => {
   Product.findAll()
     .then(products => {
       res.render('products', {
+        
         prods: products,
         pageTitle: 'All Products',
         path: '/admin/products',
@@ -30,6 +32,7 @@ exports.getProducts = (req, res, next) => {
 
 exports.getAddProduct = (req, res, next) => {
 res.render('add-product', {
+ 
     pageTitle: 'Add Product',
     path: '/admin/add-product',
     editing: false,
@@ -40,6 +43,7 @@ res.render('add-product', {
 
 exports.postAddProduct = (req, res, next) => {
   Product.create({
+    
     title: req.body.title,
     description: req.body.description,
     price: req.body.price
@@ -66,6 +70,7 @@ exports.getEditProduct = (req,res,next)=>{
         return res.redirect('/');
       }
       res.render('add-product',{
+ 
         pageTitle: 'Edit Product',
         path: '/admin/edit-product',
         editing: editMode,

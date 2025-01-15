@@ -6,7 +6,8 @@
     <%- include('includes/navigation.ejs') %>
 
     <main>
-        <% if (prods.length > 0) { %>
+         <% if (typeof prods !== 'undefined') { %>
+                        <% if (prods.length > 0) { %>
             <div class="grid">
                 <% for (let product of prods) { %>
                     <article class="card product-item">
@@ -40,6 +41,7 @@
                 <h4>No Products Found.</h4>
             </div>
         <% } %>
+                    <% } %>
     </main>
 <%- include('includes/end.ejs') %>
 

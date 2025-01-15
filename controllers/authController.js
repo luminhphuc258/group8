@@ -1,10 +1,12 @@
 // ADD NEW LIBRARY
 const User = require('../models/user')
 const Bcrypt = require('bcrypt');
+const Product = require('../models/products');
 //=============================
 
 exports.getIndex = (req, res, next) => {
   res.render('index', {
+    csrfToken: req.csrfToken(),
     path: '/index',
     pageTitle: 'Login',
     isAuthenticated: req.isLoggedIn
@@ -13,6 +15,7 @@ exports.getIndex = (req, res, next) => {
 
 exports.getLogin = (req, res, next) => {
   res.render('index', {
+    csrfToken: req.csrfToken(),
     path: '/login',
     pageTitle: 'Login',
     isAuthenticated: req.isLoggedIn
@@ -22,6 +25,7 @@ exports.getLogin = (req, res, next) => {
 
 exports.getSignup = (req, res, next) => {
   res.render('signup', {
+    csrfToken: req.csrfToken(),
     path: '/signup',
     pageTitle: 'Signup',
     isAuthenticated: req.isLoggedIn
@@ -44,10 +48,11 @@ exports.postLogin = async (req, res, next) => {
     // let redirt to main page of product 
     await Product.findAll()
       .then(products => {
-        res.render('index', {
+        res.render('products', {
+          csrfToken: req.csrfToken(),
           prods: products,
           pageTitle: 'My Shop',
-          path: '/',
+          path: '/products',
           isAuthenticated: req.session.isLoggedIn
         });
       })
@@ -102,6 +107,7 @@ exports.postSignup = (req, res, next) => {
 
 exports.postLogout = (req, res, next) => {
   req.session.destroy(err => {
+   
     console.log(err);
     res.redirect('/');
   });
